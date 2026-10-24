@@ -1,0 +1,12 @@
+{
+    "ID": "5a644e47-1482-4f7e-9177-e730bca69e3b",
+    "ActionKeyword": "mc",
+    "Name": "MiCompress",
+    "Description": "Compress images, PDFs, video, audio, documents & archives via micompress.com",
+    "Author": "MiCompress",
+    "Version": "1.0.0",
+    "Language": "python",
+    "Website": "https://github.com/micompress/Flow.Launcher.Plugin.MiCompress",
+    "IcoPath": "Images\\app.png",
+    "ExecuteFileName": "main.py"
+}
