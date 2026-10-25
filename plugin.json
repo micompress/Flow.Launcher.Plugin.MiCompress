@@ -4,7 +4,7 @@
     "Name": "MiCompress",
     "Description": "Compress images, PDFs, video, audio, documents & archives via micompress.com",
     "Author": "MiCompress",
-    "Version": "1.0.0",
+    "Version": "1.0.1",
     "Language": "python",
     "Website": "https://github.com/micompress/Flow.Launcher.Plugin.MiCompress",
     "IcoPath": "Images\\app.png",

@@ -37,6 +37,12 @@ def _human(n):
         n /= 1024.0
 
 
+def _api_key(settings):
+    # Plugin settings (SettingsTemplate.yaml) win over the environment variable.
+    key = (settings or {}).get("api_key") or os.environ.get("MICOMPRESS_API_KEY") or ""
+    return key.strip() or None
+
+
 def output_path(path):
     root, ext = os.path.splitext(path)
     return root + "-min" + ext
@@ -67,16 +73,21 @@ class MiCompress(FlowLauncher):
                 "JsonRPCAction": {"method": "open_url", "parameters": ["https://micompress.com/all-tools?" + UTM]},
             }]
         size = _human(os.path.getsize(path))
+        # Query requests always carry the plugin settings; action requests may not on
+        # older Flow versions, so the key rides along with the action parameters.
+        api_key = _api_key(self.rpc_request.get("settings"))
         return [{
             "Title": "Compress %s — %s" % (os.path.basename(path), label),
             "SubTitle": "%s · %s · saves to %s" % (size, hint, os.path.basename(output_path(path))),
             "IcoPath": ICON,
-            "JsonRPCAction": {"method": "compress", "parameters": [path, preset]},
+            "JsonRPCAction": {"method": "compress", "parameters": [path, preset, api_key]},
         } for preset, label, hint in PRESETS]
 
-    def compress(self, path, preset):
+    def compress(self, path, preset, api_key=None):
         try:
-            data, meta = compress_file(path, preset=preset)
+            data, meta = compress_file(
+                path, preset=preset,
+                api_key=api_key or _api_key(self.rpc_request.get("settings")))
         except CompressError as e:
             FlowLauncherAPI.show_msg("MiCompress: compression failed", str(e), ICON)
             return
